@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>index</title>
+</head>
+<body>
+  <h1>index HTML</h1>
+  <h1>生成url 短链接</h1>
+  <div>
+    输入url : <input id='webUrl' type="text" name="" value="" placeholder="输入网址"> <input id='dec' type="button" value='X'>
+  </div>
+  <label for="flag1" >
+    <input type="radio" id="flag1" name="shortUrl" value="sina.lt" ID=Radio1 onclick='chooseInput(this)'>sina.lt
+  </label>
+  
+  <label for="flag2" >
+    <input type="radio" id="flag2" name="shortUrl" value="t.cn" ID=Radio1 checked onclick='chooseInput(this)'>t.cn
+  </label>
+
+  <label for="flag3" >
+    <input type="radio" id="flag3" name="shortUrl" value="dwz.cn" ID=Radio1 onclick='chooseInput(this)'>dwz.cn
+  </label>
+  
+
+
+  <br>
+  <br>
+  <div>
+    <input id='btn' type="button" value='点击生成短链接'>
+  </div>
+  
+  <div>
+    短链接
+    <p id='shortUrl'>这里是生成的短链接</p>
+  </div>
+
+  <div>
+    短链接title
+    <p id='shortUrlTitle'>这里是生成的短链接Title</p>
+  </div>
+  
+
+  <!-- axios的cdn地址 -->
+  <!-- <script src="https://cdn.bootcss.com/axios/0.16.2/axios.js"></script> -->
+
+  <script src="/javascripts/axios.js"></script>
+  <script src="/javascripts/a.js"></script>
+  <script>
+    let RESULT_OK = 'ok'
+    let RESULT_CAPTCHA = "captcha"
+    let OFFICIAL_WEBSITE = "http://dwz.wailian.work/"
+    let ALERT_TXTE = '请求次数过多!\n点击确定   进入官网手势验证，\n点击取消   耐心等待一会-。-'
+
+    let wenUrl = document.getElementById('webUrl')
+    let dec = document.getElementById('dec')
+    let btn = document.getElementById('btn')
+    let shortUrl = document.getElementById('shortUrl')
+    let shortUrlTitle = document.getElementById('shortUrlTitle')
+    let shortUrlTypes = {
+      "sina.lt" : 'sinalt',
+      "t.cn" : 'sina',
+      "dwz.cn" : 'dwz'
+    }
+    let shortUrlType = shortUrlTypes["t.cn"]
+    function chooseInput(e){
+      shortUrlType = shortUrlTypes[e.value]
+    }
+    //多次输入的时候 需要验证
+    // {
+    //     result:"captcha",
+    //     data:{
+    //       challenge:"a17250e550890c3644a7896446abef24",
+    //       gt:"0e3c487c91ce47741cc2b9597f5f9c70",
+    //       success:1
+    //     }
+    // }
+   
+    
+    dec.addEventListener('click',function(){
+      wenUrl.value = ''
+    })
+
+    function getShortUrl(){
+      let url = wenUrl.value
+      if(url == ''){
+        alert('输入的url不能为空(不合法)')
+        return
+      }
+      let baseUrl = window.btoa(url)
+      axios.get('/api/shortUrl',{
+        params: {
+          url:baseUrl,
+          site:shortUrlType
+        }
+      })
+      .then(function (response) {
+        console.log(response);
+        if(response.data.result === RESULT_OK){
+          shortUrl.innerHTML = response.data.data.short_url
+          shortUrlTitle.innerHTML = response.data.data.title
+        }else if(response.data.result === RESULT_CAPTCHA){
+          let geetest_challenge = response.data.data.challenge
+          let geetest_validate = response.data.data.gt
+          let geetest_seccode = response.data.data.gt + '|jordan'
+          console.log(geetest_challenge)
+          console.log(geetest_validate)
+          console.log(geetest_seccode)
+          if (confirm(ALERT_TXTE)) {  
+              window.open(OFFICIAL_WEBSITE);
+          }  
+          else {  
+              return
+          }  
+          
+        }
+        
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+    btn.addEventListener('click',getShortUrl)
+
+    
+  </script>
+</body>
+</html>

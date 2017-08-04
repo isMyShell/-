@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>short-url</title>
+</head>
+<body>
+  <h1>short-url</h1>
+
+  <div>
+    短链接
+  </div>
+
+  <script>
+    let a = 'http://m.baidu.com/ssid=b4ad3632333833393331303a0a/from=844b/s?word=%E7%BC%BA%E5%BF%83%E7%9C%BC%E5%84%BF%E6%80%8E%E4%B9%88%E6%B2%BB&ts=0412713&t_kt=0&ie=utf-8&fm_kl=021394be2f&rsv_iqid=0009437633&rsv_t=edf6ArvcGdnpcFuzpcXYwJc%252FJE8jGUZsL2DrOAWxG2HwyQfTr7AAhmLplg&sa=ihr_1&ms=1&rsv_pq=0009437633&rsv_sug4=2029&ss=001&from=844b&vit=fps&pu=sz%401321_480&t_noscript=jump'
+
+		let b = window.btoa(a)
+		console.log(b)
+		// let options = {
+		// 	type:'GET',
+		// 	url:'http://dwz.wailian.work/api.php',
+		// 	data:{
+		// 		url:b,
+		// 		site:'sina'
+		// 	},
+		// 	success:function(data, status, xhr){
+		// 		console.log(data)
+		// 	},
+		// 	err:function(data, status, xhr){
+		// 		console.log(data)
+		// 	}
+		// }
+		// $.ajax(options)
+  </script>
+</body>
+</html>
